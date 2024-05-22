@@ -1,0 +1,187 @@
+table Calendário
+	lineageTag: d450dd94-3109-40cc-bc87-b619f7e518f8
+	dataCategory: Time
+
+	column Data
+		dataType: dateTime
+		isKey
+		formatString: Short Date
+		lineageTag: ad5a1bc2-8151-40a7-b5a8-2244abdfb43f
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: a574ee16-2ec8-4392-9d50-9d388eac79b9
+		summarizeBy: none
+		sourceColumn: Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês Id'
+		dataType: int64
+		formatString: 0
+		lineageTag: c682daa7-7354-4ec6-8213-21f0b8b5aa03
+		summarizeBy: none
+		sourceColumn: Mês Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mês
+		dataType: string
+		lineageTag: 10086f62-457b-48cc-9dd9-15b3cbca32bd
+		summarizeBy: none
+		sourceColumn: Mês
+		sortByColumn: 'Mês Id'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês Abreviado'
+		dataType: string
+		lineageTag: 5ec552d1-41e8-4ee9-889f-ec7a00fcd5af
+		summarizeBy: none
+		sourceColumn: Mês Abreviado
+		sortByColumn: 'Mês Id'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Trimeste Id'
+		dataType: int64
+		formatString: 0
+		lineageTag: b43ccbc1-fcce-41ef-b93a-6b09550eb1a2
+		summarizeBy: none
+		sourceColumn: Trimeste Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		dataType: string
+		lineageTag: 761ea8d2-6213-4307-8c56-657764122bf6
+		summarizeBy: none
+		sourceColumn: Trimestre
+		sortByColumn: 'Trimeste Id'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Semana do Ano'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9ec9e7f4-bc61-427e-b17b-d36fd429e9c0
+		summarizeBy: none
+		sourceColumn: Semana do Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Semana Data Início'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 0f420a00-5486-43d6-9394-d3883b04a8a0
+		summarizeBy: none
+		sourceColumn: Semana Data Início
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Dia
+		dataType: int64
+		formatString: 0
+		lineageTag: cbecb585-0aee-4287-91bd-edf53b0ead5a
+		summarizeBy: none
+		sourceColumn: Dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dia da Semana'
+		dataType: string
+		lineageTag: 95dc9ed0-802b-4962-9477-7bcd59272f22
+		summarizeBy: none
+		sourceColumn: Dia da Semana
+		sortByColumn: 'Dia da Semana Id'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dia da Semana Id'
+		dataType: int64
+		formatString: 0
+		lineageTag: d256a3fd-ceab-4089-80ad-3bf421fbac7f
+		summarizeBy: none
+		sourceColumn: Dia da Semana Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Periodo Abreviado'
+		dataType: string
+		lineageTag: 0af2b264-adbd-4dc3-83b0-f6c837b51640
+		summarizeBy: none
+		sourceColumn: Periodo Abreviado
+		sortByColumn: 'Mês Data Início'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês Data Início'
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: d4261d6a-7ad8-4773-ba43-efde171635da
+		summarizeBy: none
+		sourceColumn: Mês Data Início
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Periodo
+		dataType: string
+		lineageTag: 9007ad12-2b1e-4d96-a24f-05513d887724
+		summarizeBy: none
+		sourceColumn: Periodo
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendário = m
+		mode: import
+		source =
+				let
+				    EndDate = DateTime.Date(DateTime.LocalNow()),
+				    StartDate = Date.StartOfYear(#date(2000,1,1)),
+				    Source = List.Dates(StartDate, Duration.Days(EndDate - StartDate) + 1, #duration(1,0,0,0)),
+				    #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+				    #"Renamed Columns" = Table.RenameColumns(#"Converted to Table",{{"Column1", "Date"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"Date", type date}}),
+				    #"Inserted Year" = Table.AddColumn(#"Changed Type", "Year", each Date.Year([Date]), Int64.Type),
+				    #"Inserted Month" = Table.AddColumn(#"Inserted Year", "Month", each Date.Month([Date]), Int64.Type),
+				    #"Inserted Month Name" = Table.AddColumn(#"Inserted Month", "Month Name", each Date.MonthName([Date]), type text),
+				    #"Inserted First Characters" = Table.AddColumn(#"Inserted Month Name", "Short Month Name", each Text.Start([Month Name], 3), type text),
+				    #"Inserted Merged Column" = Table.AddColumn(#"Inserted First Characters", "Year Month", each Text.Combine({Text.From([Year], "pt-BR"), [Short Month Name]}, "-"), type text),
+				    #"Inserted Start of Month" = Table.AddColumn(#"Inserted Merged Column", "Start of Month", each Date.StartOfMonth([Date]), type date),
+				    #"Inserted Quarter" = Table.AddColumn(#"Inserted Start of Month", "Quarter", each Date.QuarterOfYear([Date]), Int64.Type),
+				    #"Inserted Prefix" = Table.AddColumn(#"Inserted Quarter", "Quarter Name", each "Q" & Text.From([Quarter], "pt-BR"), type text),
+				    #"Inserted Week of Year" = Table.AddColumn(#"Inserted Prefix", "Week of Year", each Date.WeekOfYear([Date]), Int64.Type),
+				    #"Inserted Start of Week" = Table.AddColumn(#"Inserted Week of Year", "Start of Week", each Date.StartOfWeek([Date]), type date),
+				    #"Inserted Day" = Table.AddColumn(#"Inserted Start of Week", "Day", each Date.Day([Date]), Int64.Type),
+				    #"Inserted Day Name" = Table.AddColumn(#"Inserted Day", "Day Name", each Date.DayOfWeekName([Date]), type text),
+				    #"Inserted Day of Week" = Table.AddColumn(#"Inserted Day Name", "Day of Week", each Date.DayOfWeek([Date]), Int64.Type),
+				    #"Inserted Merged Column1" = Table.AddColumn(#"Inserted Day of Week", "Year Month Long", each Text.Combine({Text.From([Year], "pt-BR"), [Month Name]}, "-"), type text),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Inserted Merged Column1",{{"Date", "Data"}, {"Year", "Ano"}, {"Month", "Mês Id"}, {"Month Name", "Mês"}, {"Short Month Name", "Mês Abreviado"}, {"Year Month", "Periodo Abreviado"}, {"Start of Month", "Mês Data Início"}, {"Quarter", "Trimeste Id"}, {"Quarter Name", "Trimestre"}, {"Week of Year", "Semana do Ano"}, {"Start of Week", "Semana Data Início"}, {"Day", "Dia"}, {"Day Name", "Dia da Semana"}, {"Day of Week", "Dia da Semana Id"}, {"Year Month Long", "Periodo"}})
+				in
+				    #"Renamed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

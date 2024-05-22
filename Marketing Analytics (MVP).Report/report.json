@@ -1,0 +1,66 @@
+{
+  "config": "{\"version\":\"5.49\",\"themeCollection\":{\"baseTheme\":{\"name\":\"CY23SU11\",\"version\":\"5.49\",\"type\":2},\"customTheme\":{\"name\":\"AccessibleCityPark\",\"version\":\"5.49\",\"type\":2}},\"activeSectionIndex\":0,\"defaultDrillFilterOtherVisuals\":true,\"slowDataSourceSettings\":{\"isCrossHighlightingDisabled\":false,\"isSlicerSelectionsButtonEnabled\":false,\"isFilterSelectionsButtonEnabled\":false,\"isFieldWellButtonEnabled\":false,\"isApplyAllButtonEnabled\":false},\"linguisticSchemaSyncVersion\":2,\"settings\":{\"useNewFilterPaneExperience\":true,\"allowChangeFilterTypes\":true,\"useStylableVisualContainerHeader\":true,\"queryLimitOption\":6,\"useEnhancedTooltips\":true,\"exportDataMode\":1,\"useDefaultAggregateDisplayName\":true},\"objects\":{\"section\":[{\"properties\":{\"verticalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'Top'\"}}}}}],\"outspacePane\":[{\"properties\":{\"expanded\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}]}}",
+  "layoutOptimization": 0,
+  "resourcePackages": [
+    {
+      "resourcePackage": {
+        "disabled": false,
+        "items": [
+          {
+            "name": "AccessibleCityPark",
+            "path": "BuiltInThemes/AccessibleCityPark.json",
+            "type": 201
+          },
+          {
+            "name": "CY23SU11",
+            "path": "BaseThemes/CY23SU11.json",
+            "type": 202
+          }
+        ],
+        "name": "SharedResources",
+        "type": 2
+      }
+    }
+  ],
+  "sections": [
+    {
+      "config": "{}",
+      "displayName": "Page 1",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720.00,
+      "name": "ReportSection7afe7d7e630146d2dd80",
+      "visualContainers": [
+        {
+          "config": "{\"name\":\"7de2e1069885c248cc18\",\"layouts\":[{\"id\":0,\"position\":{\"x\":24.82758620689655,\"y\":252.70935960591135,\"z\":2000,\"width\":303.2512315270936,\"height\":134.7783251231527,\"tabOrder\":2000}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"Campanhas.account_id\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"Campanhas\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"Id Conta de Anúncio\"},\"Name\":\"Campanhas.account_id\",\"NativeReferenceName\":\"account_id\"}]},\"drillFilterOtherVisuals\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Basic'\"}}}}}],\"general\":[{\"properties\":{\"orientation\":{\"expr\":{\"Literal\":{\"Value\":\"0D\"}}}}}]}}}",
+          "filters": "[]",
+          "height": 134.78,
+          "width": 303.25,
+          "x": 24.83,
+          "y": 252.71,
+          "z": 2000.00
+        },
+        {
+          "config": "{\"name\":\"ba4e3564c45a576ddc36\",\"layouts\":[{\"id\":0,\"position\":{\"x\":24.82758620689655,\"y\":19.507389162561577,\"z\":0,\"width\":303.2512315270936,\"height\":184.43349753694582,\"tabOrder\":0}}],\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"Campanhas._Count PK\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"Campanhas\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"_ContagemTotal PK\"},\"Name\":\"Campanhas._Count PK\",\"NativeReferenceName\":\"_ContagemTotal PK\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"_ContagemTotal PK\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true}}",
+          "filters": "[]",
+          "height": 184.43,
+          "width": 303.25,
+          "x": 24.83,
+          "y": 19.51,
+          "z": 0.00
+        },
+        {
+          "config": "{\"name\":\"c9df62ba440deec0c470\",\"layouts\":[{\"id\":0,\"position\":{\"x\":347.0422535211268,\"y\":20.732394366197184,\"z\":1000,\"width\":302.8732394366197,\"height\":183.88732394366198,\"tabOrder\":1000}}],\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"Campanhas._CountD PK\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"Campanhas\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"_ContagemUnicos PK\"},\"Name\":\"Campanhas._CountD PK\",\"NativeReferenceName\":\"_ContagemUnicos PK\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"_ContagemUnicos PK\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true}}",
+          "filters": "[]",
+          "height": 183.89,
+          "width": 302.87,
+          "x": 347.04,
+          "y": 20.73,
+          "z": 1000.00
+        }
+      ],
+      "width": 1280.00
+    }
+  ],
+  "theme": "AccessibleCityPark"
+}

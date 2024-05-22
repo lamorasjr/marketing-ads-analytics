@@ -1,0 +1,63 @@
+table 'Contas de Anúncio'
+	lineageTag: f3e3ac3d-9592-48e6-b10f-0dadac0c9188
+
+	column 'Conta de Negócio'
+		dataType: string
+		lineageTag: 5ad2efec-d8cc-4bc7-8beb-10c43abd97fc
+		summarizeBy: none
+		sourceColumn: Conta de Negócio
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Conta de Anúncio'
+		dataType: string
+		lineageTag: ba3f1f9e-2655-4e32-99b8-3a58ef147040
+		summarizeBy: none
+		sourceColumn: Conta de Anúncio
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Id Conta de Anúncio'
+		dataType: string
+		lineageTag: 600c3850-d502-4d21-86fb-01de1126f323
+		summarizeBy: none
+		sourceColumn: Id Conta de Anúncio
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Contas de Anúncio' = m
+		mode: import
+		source = ```
+				let
+				// required variables
+				    url = "https://graph.facebook.com/v18.0/me",
+				    fields = "id,adaccounts{business_name,name}",
+				    headers = [ Authorization = "Bearer " & access_token ],
+				
+				    Source = Json.Document(
+				        Web.Contents(
+				            url, 
+				            [
+				                Headers = headers,
+				                Query = [ 
+				                    date_preset = "maximum",
+				                    fields = fields 
+				                ]
+				            ]
+				        )
+				    ),
+				    adaccounts = Source[adaccounts],
+				    data = adaccounts[data],
+				    #"Converted to Table" = Table.FromList(data, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+				    #"Expanded Column1" = Table.ExpandRecordColumn(#"Converted to Table", "Column1", {"business_name", "name", "id"}, {"business_name", "name", "id"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Expanded Column1",{{"business_name", type text}, {"name", type text}, {"id", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"business_name", "Conta de Negócio"}, {"name", "Conta de Anúncio"}, {"id", "Id Conta de Anúncio"}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Renamed Columns", each List.Contains(customer_adaccounts[Customer Ad Account], [Id Conta de Anúncio]))
+				in
+				    #"Filtered Rows"
+				```
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

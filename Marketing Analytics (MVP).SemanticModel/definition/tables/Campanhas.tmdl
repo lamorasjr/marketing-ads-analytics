@@ -1,0 +1,212 @@
+table Campanhas
+	lineageTag: 04bca426-b32e-4e8e-98b7-7a2e6998b5de
+
+	measure '_ContagemTotal PK' =
+			
+			COUNT(
+			    Campanhas[Campanha Id]
+			)
+		formatString: 0
+		lineageTag: a6af5732-e398-4499-a908-1721460c916a
+
+	measure '_ContagemUnicos PK' =
+			
+			DISTINCTCOUNT(
+			    Campanhas[Campanha Id]
+			)
+		formatString: 0
+		lineageTag: ce215ff0-5e6d-4d4e-bfa6-b5d17d70f393
+
+	column 'Id Conta de Anúncio'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5bd260c0-d852-4d19-94f4-c774d492cc3a
+		summarizeBy: none
+		sourceColumn: Id Conta de Anúncio
+
+		annotation SummarizationSetBy = User
+
+	column 'Campanha Id'
+		dataType: int64
+		formatString: 0
+		lineageTag: fc9fe0f5-b47b-46b4-a212-ef02842cdd0d
+		summarizeBy: count
+		sourceColumn: Campanha Id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Campanha Nome'
+		dataType: string
+		lineageTag: 3898b355-8980-4a98-a04c-791f02bd0db9
+		summarizeBy: none
+		sourceColumn: Campanha Nome
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Objetivo de Campanha'
+		dataType: string
+		lineageTag: d4e1b9de-547d-427f-a6c7-06b4d0bb0023
+		summarizeBy: none
+		sourceColumn: Objetivo de Campanha
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Tipo de Compra'
+		dataType: string
+		lineageTag: 0a95f572-0768-4ccd-8950-5de22a57c8a3
+		summarizeBy: none
+		sourceColumn: Tipo de Compra
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Estratégia de Otmimização'
+		dataType: string
+		lineageTag: 466f652b-714f-4132-b2ae-317310285e44
+		summarizeBy: none
+		sourceColumn: Estratégia de Otmimização
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Orçamento Diário'
+		dataType: int64
+		formatString: 0
+		lineageTag: 39a5a7eb-cb7a-4e89-ac35-b7b91091ac10
+		summarizeBy: sum
+		sourceColumn: Orçamento Diário
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Categoria Especial de Anúncio'
+		dataType: string
+		lineageTag: 67de3108-19a3-4e03-a2e9-dfe38d7bc4c3
+		summarizeBy: none
+		sourceColumn: Categoria Especial de Anúncio
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 445f9764-677c-4c5c-93d3-2aa90f7c5f5d
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de Criação'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: cacdaea2-5e68-40cd-b4dc-af7f3ed54859
+		summarizeBy: none
+		sourceColumn: Data de Criação
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Data de Veiculação'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 5117d997-a774-4be9-bce2-c7e3d9066810
+		summarizeBy: none
+		sourceColumn: Data de Veiculação
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Data de Pausa'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1728e442-603b-4c59-a13a-cddf52cdd08d
+		summarizeBy: none
+		sourceColumn: Data de Pausa
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Data da Última Atualização'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: e9447ea4-8755-4563-b2f1-d70ce42dc67f
+		summarizeBy: none
+		sourceColumn: Data da Última Atualização
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Id Campanha de Origem'
+		dataType: int64
+		formatString: 0
+		lineageTag: a6d23aa6-847f-47d4-ac2d-1bc5dac3019b
+		summarizeBy: sum
+		sourceColumn: Id Campanha de Origem
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Id Act Conta de Anúncio'
+		dataType: string
+		lineageTag: b57cd28d-6c87-44a1-94bc-143ae6d90bef
+		summarizeBy: none
+		sourceColumn: Id Act Conta de Anúncio
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Campanhas = m
+		mode: import
+		source = ```
+				let
+				// API parameters
+				    Base_url = "https://graph.facebook.com/v18.0/",
+				    Endpoint_url = "/campaigns",
+				    Fields = "account_id,id,name,objective,buying_type,bid_strategy,daily_budget,special_ad_category,status,created_time,start_time,stop_time,updated_time,source_campaign_id",
+				    Limit = "1000",
+				    Date_preset = "maximum",
+				            
+				// Get API data functions
+				    fn_get_api_data = ( Adaccount_id as text, Page_cursor as text) =>
+				        Json.Document(
+				            Web.Contents( 
+				                Base_url,
+				                [
+				                    RelativePath = Adaccount_id & Endpoint_url,
+				                    Headers = [ Authorization = "Bearer " & access_token ], 
+				                    Query = [ date_preset=Date_preset, fields=Fields, limit=Limit, after=Page_cursor ] 
+				                ] 
+				            )
+				        ),
+				
+				// Get API paginated results
+				    fn_get_api_data_loop = ( Adaccount_id as text ) =>
+				        List.Generate(
+				            () => [
+				                api_data = fn_get_api_data( Adaccount_id , "" ),   // Adjust the addacoun parameter here
+				                api_cursor = ""
+				            ],
+				            each List.Count( [api_data][data] ) > 0,
+				            each [ 
+				                api_data = fn_get_api_data( Adaccount_id , [api_data][paging][cursors][after] ),   // Adjust the addacoun parameter here
+				                api_cursor = [api_data][paging][cursors][after]
+				            ],
+				            each Table.FromRecords({[ api_data = [api_data][data], api_cursor = [api_data][paging][cursors][after] ]})
+				        ),
+				        
+				// Get data from all user ad account
+				    Source = Table.AddColumn(customer_adaccounts, "API data", each fn_get_api_data_loop([Customer Ad Account])),
+				    #"Expanded API data" = Table.ExpandListColumn(Source, "API data"),
+				    #"Expanded API data1" = Table.ExpandTableColumn(#"Expanded API data", "API data", {"api_data", "api_cursor"}, {"api_data", "api_cursor"}),
+				    #"Expanded api_data" = Table.ExpandListColumn(#"Expanded API data1", "api_data"),
+				    #"Expanded api_data1" = Table.ExpandRecordColumn(#"Expanded api_data", "api_data", {"account_id", "id", "name", "objective", "buying_type", "bid_strategy", "daily_budget", "special_ad_category", "status", "created_time", "start_time", "stop_time", "updated_time", "source_campaign_id"}, {"account_id", "id", "name", "objective", "buying_type", "bid_strategy", "daily_budget", "special_ad_category", "status", "created_time", "start_time", "stop_time", "updated_time", "source_campaign_id"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Expanded api_data1",{"api_cursor"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Columns",{{"Customer Ad Account", type text}, {"account_id", Int64.Type}, {"id", Int64.Type}, {"name", type text}, {"objective", type text}, {"buying_type", type text}, {"bid_strategy", type text}, {"daily_budget", Int64.Type}, {"special_ad_category", type text}, {"status", type text}, {"created_time", type datetimezone}, {"start_time", type datetimezone}, {"stop_time", type datetimezone}, {"updated_time", type datetimezone}, {"source_campaign_id", Int64.Type}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"account_id", "Id Conta de Anúncio"}, {"id", "Campanha Id"}, {"name", "Campanha Nome"}, {"objective", "Objetivo de Campanha"}, {"buying_type", "Tipo de Compra"}, {"bid_strategy", "Estratégia de Otmimização"}, {"daily_budget", "Orçamento Diário"}, {"special_ad_category", "Categoria Especial de Anúncio"}, {"status", "Status"}, {"created_time", "Data de Criação"}, {"start_time", "Data de Veiculação"}, {"stop_time", "Data de Pausa"}, {"updated_time", "Data da Última Atualização"}, {"source_campaign_id", "Id Campanha de Origem"}, {"Customer Ad Account", "Id Act Conta de Anúncio"}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns",{{"Data de Criação", type date}, {"Data de Veiculação", type date}, {"Data de Pausa", type date}, {"Data da Última Atualização", type date}})
+				in
+				    #"Changed Type1"
+				```
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

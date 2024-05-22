@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Marketing Analytics (MVP)"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "fadb5fc5-c1d1-4ffd-8203-73655c888960"
+  }
+}

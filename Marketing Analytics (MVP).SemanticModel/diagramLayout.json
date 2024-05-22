@@ -1,0 +1,61 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 187.22771087323241,
+            "y": 187.8384436486601
+          },
+          "nodeIndex": "Contas de Anúncio",
+          "nodeLineageTag": "f3e3ac3d-9592-48e6-b10f-0dadac0c9188",
+          "size": {
+            "height": 190.83143200489684,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 481.14871645579581,
+            "y": 399.81737940483771
+          },
+          "nodeIndex": "Campanhas",
+          "nodeLineageTag": "04bca426-b32e-4e8e-98b7-7a2e6998b5de",
+          "size": {
+            "height": 351.08334968638695,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 774.7420071393019,
+            "y": 17.412801090644329
+          },
+          "nodeIndex": "Calendário",
+          "nodeLineageTag": "d450dd94-3109-40cc-bc87-b619f7e518f8",
+          "size": {
+            "height": 269.99603337387441,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 83.779456191072782,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}
