@@ -41,6 +41,15 @@
           "z": 2000.00
         },
         {
+          "config": "{\"name\":\"a6d0fa8434604ad030d0\",\"layouts\":[{\"id\":0,\"position\":{\"x\":676.7816091954023,\"y\":122.29885057471266,\"z\":2001,\"width\":466.2068965517242,\"height\":171.0344827586207,\"tabOrder\":2001}}],\"singleVisual\":{\"visualType\":\"tableEx\",\"projections\":{\"Values\":[{\"queryRef\":\"Contas de Anúncio.Id Conta de Anúncio\"},{\"queryRef\":\"Campanhas.Min Data\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"c1\",\"Entity\":\"Contas de Anúncio\",\"Type\":0},{\"Name\":\"c\",\"Entity\":\"Campanhas\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c1\"}},\"Property\":\"Id Conta de Anúncio\"},\"Name\":\"Contas de Anúncio.Id Conta de Anúncio\",\"NativeReferenceName\":\"Id Conta de Anúncio\"},{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"Min Data\"},\"Name\":\"Campanhas.Min Data\",\"NativeReferenceName\":\"Min Data\"}]},\"drillFilterOtherVisuals\":true}}",
+          "filters": "[]",
+          "height": 171.03,
+          "width": 466.21,
+          "x": 676.78,
+          "y": 122.30,
+          "z": 2001.00
+        },
+        {
           "config": "{\"name\":\"ba4e3564c45a576ddc36\",\"layouts\":[{\"id\":0,\"position\":{\"x\":24.82758620689655,\"y\":19.507389162561577,\"z\":0,\"width\":303.2512315270936,\"height\":184.43349753694582,\"tabOrder\":0}}],\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"Campanhas._Count PK\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"Campanhas\",\"Type\":0}],\"Select\":[{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"_ContagemTotal PK\"},\"Name\":\"Campanhas._Count PK\",\"NativeReferenceName\":\"_ContagemTotal PK\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Measure\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"_ContagemTotal PK\"}}}]},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true}}",
           "filters": "[]",
           "height": 184.43,

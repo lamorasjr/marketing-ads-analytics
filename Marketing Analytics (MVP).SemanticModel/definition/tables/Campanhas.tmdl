@@ -17,6 +17,14 @@ table Campanhas
 		formatString: 0
 		lineageTag: ce215ff0-5e6d-4d4e-bfa6-b5d17d70f393
 
+	measure 'Min Data' =
+			
+			MIN(
+			    Campanhas[Data de Criação]
+			)
+		formatString: General Date
+		lineageTag: 11a1948e-ba26-4517-9cde-4c0db6ae8504
+
 	column 'Id Conta de Anúncio'
 		dataType: int64
 		formatString: 0
@@ -68,7 +76,7 @@ table Campanhas
 		annotation SummarizationSetBy = Automatic
 
 	column 'Orçamento Diário'
-		dataType: int64
+		dataType: double
 		formatString: 0
 		lineageTag: 39a5a7eb-cb7a-4e89-ac35-b7b91091ac10
 		summarizeBy: sum
@@ -201,9 +209,10 @@ table Campanhas
 				    #"Removed Columns" = Table.RemoveColumns(#"Expanded api_data1",{"api_cursor"}),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Columns",{{"Customer Ad Account", type text}, {"account_id", Int64.Type}, {"id", Int64.Type}, {"name", type text}, {"objective", type text}, {"buying_type", type text}, {"bid_strategy", type text}, {"daily_budget", Int64.Type}, {"special_ad_category", type text}, {"status", type text}, {"created_time", type datetimezone}, {"start_time", type datetimezone}, {"stop_time", type datetimezone}, {"updated_time", type datetimezone}, {"source_campaign_id", Int64.Type}}),
 				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"account_id", "Id Conta de Anúncio"}, {"id", "Campanha Id"}, {"name", "Campanha Nome"}, {"objective", "Objetivo de Campanha"}, {"buying_type", "Tipo de Compra"}, {"bid_strategy", "Estratégia de Otmimização"}, {"daily_budget", "Orçamento Diário"}, {"special_ad_category", "Categoria Especial de Anúncio"}, {"status", "Status"}, {"created_time", "Data de Criação"}, {"start_time", "Data de Veiculação"}, {"stop_time", "Data de Pausa"}, {"updated_time", "Data da Última Atualização"}, {"source_campaign_id", "Id Campanha de Origem"}, {"Customer Ad Account", "Id Act Conta de Anúncio"}}),
-				    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns",{{"Data de Criação", type date}, {"Data de Veiculação", type date}, {"Data de Pausa", type date}, {"Data da Última Atualização", type date}})
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns",{{"Data de Criação", type date}, {"Data de Veiculação", type date}, {"Data de Pausa", type date}, {"Data da Última Atualização", type date}}),
+				    #"Divided Column" = Table.TransformColumns(#"Changed Type1", {{"Orçamento Diário", each _ / 100, type number}})
 				in
-				    #"Changed Type1"
+				    #"Divided Column"
 				```
 
 	annotation PBI_NavigationStepName = Navigation

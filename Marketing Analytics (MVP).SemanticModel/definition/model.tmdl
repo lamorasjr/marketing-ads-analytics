@@ -14,14 +14,16 @@ queryGroup Parameters
 
 annotation PBIDesktopVersion = 2.128.1380.0 (24.04)
 
-annotation PBI_QueryOrder = ["access_token","Calendário","Contas de Anúncio","Campanhas","customer_adaccounts"]
+annotation PBI_QueryOrder = ["access_token","customer_adaccounts","Calendário","Contas de Anúncio","Campanhas","Conjunto de Anúncios","Anúncios","Criativos de Anúncios","Ads Insights","Ads Insights Actions"]
 
-annotation __PBI_TimeIntelligenceEnabled = 1
+annotation __PBI_TimeIntelligenceEnabled = 0
 
 annotation PBI_ProTooling = ["CalcGroup","DevMode"]
 
-ref table DateTableTemplate_a2dc5a29-fd1b-4979-b1a9-77c882990333
 ref table 'Contas de Anúncio'
 ref table Calendário
 ref table Campanhas
+ref table 'Ads Insights'
+ref table 'Ads Insights Actions'
+ref table Anúncios
 

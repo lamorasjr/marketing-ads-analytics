@@ -1,0 +1,171 @@
+table 'Ads Insights'
+	lineageTag: 4cf6f315-cf85-4a85-a3a9-68a23b74ad9e
+
+	column 'Id Act Conjunto de Anúncio'
+		dataType: string
+		lineageTag: 4e7e797f-5fb4-4ec2-9a5d-9e3b61162386
+		summarizeBy: none
+		sourceColumn: Id Act Conjunto de Anúncio
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Id Conta de Anúncio'
+		dataType: int64
+		formatString: 0
+		lineageTag: edc17eeb-4fdc-4ef0-90de-6a0571cd7f3b
+		summarizeBy: sum
+		sourceColumn: Id Conta de Anúncio
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data Inicial'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1b2bf9ec-004d-4042-b7cb-8eeedaea0f21
+		summarizeBy: none
+		sourceColumn: Data Inicial
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Data Final'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d099532f-2e71-4847-9613-24871815b47f
+		summarizeBy: none
+		sourceColumn: Data Final
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Valor Gasto'
+		dataType: double
+		lineageTag: 693a723a-6322-407d-9ddb-3a6c5220e99b
+		summarizeBy: sum
+		sourceColumn: Valor Gasto
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Moeda
+		dataType: string
+		lineageTag: c11405ec-2375-4044-a011-2c5f34c45ced
+		summarizeBy: none
+		sourceColumn: Moeda
+
+		annotation SummarizationSetBy = Automatic
+
+	column Alcance
+		dataType: int64
+		formatString: 0
+		lineageTag: e58de18e-9d65-4d2e-97fa-3641acf34079
+		summarizeBy: sum
+		sourceColumn: Alcance
+
+		annotation SummarizationSetBy = Automatic
+
+	column Impressões
+		dataType: int64
+		formatString: 0
+		lineageTag: 81409107-1b6c-454e-9dad-7abecc8ed5ba
+		summarizeBy: sum
+		sourceColumn: Impressões
+
+		annotation SummarizationSetBy = Automatic
+
+	column Frequência
+		dataType: double
+		lineageTag: 7ff0f62b-4bc5-4fa4-846c-eeb3ac29419d
+		summarizeBy: sum
+		sourceColumn: Frequência
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Cliques no Link'
+		dataType: int64
+		formatString: 0
+		lineageTag: c0675eb6-b3b9-4ec9-8a4a-55d3d0263b77
+		summarizeBy: sum
+		sourceColumn: Cliques no Link
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cliques
+		dataType: int64
+		formatString: 0
+		lineageTag: d58cabc5-2d98-40ad-89e5-9c4bc4c786a6
+		summarizeBy: sum
+		sourceColumn: Cliques
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Engajamento de Posts'
+		dataType: int64
+		formatString: 0
+		lineageTag: e83b8ff3-3dc3-4904-a36b-202c3cb457bb
+		summarizeBy: sum
+		sourceColumn: Engajamento de Posts
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Ads Insights' = m
+		mode: import
+		source = ```
+				let
+				// API parameters
+				    Base_url = "https://graph.facebook.com/v18.0/",
+				    Endpoint_url = "/insights",
+				    Fields = "account_id,campaign_id,adset_id,ad_id,date_start,date_stop,spend,account_currency,reach,impressions,frequency,inline_link_clicks,clicks,inline_post_engagement",
+				    Limit = "5000",
+				    Date_preset = "last_30d",
+				            
+				// Get API data functions
+				    fn_get_api_data = ( Adaccount_id as text, Page_cursor as text) =>
+				        Json.Document(
+				            Web.Contents( 
+				                Base_url,
+				                [
+				                    RelativePath = Adaccount_id & Endpoint_url,
+				                    Headers = [ Authorization = "Bearer " & access_token ], 
+				                    Query = [ date_preset=Date_preset, fields=Fields, limit=Limit, after=Page_cursor ] 
+				                ] 
+				            )
+				        ),
+				
+				// Get API paginated results
+				    fn_get_api_data_loop = ( Adaccount_id as text ) =>
+				        List.Generate(
+				            () => [
+				                api_data = fn_get_api_data( Adaccount_id , "" ),   // Adjust the addacoun parameter here
+				                api_cursor = ""
+				            ],
+				            each List.Count( [api_data][data] ) > 0,
+				            each [ 
+				                api_data = fn_get_api_data( Adaccount_id , [api_data][paging][cursors][after] ),   // Adjust the addacoun parameter here
+				                api_cursor = [api_data][paging][cursors][after]
+				            ],
+				            each Table.FromRecords({[ api_data = [api_data][data], api_cursor = [api_data][paging][cursors][after] ]})
+				        ),
+				        
+				// Get data from all user ad account
+				    Source = Table.AddColumn(customer_adaccounts, "API data", each fn_get_api_data_loop([Customer Ad Account])),
+				    #"Expanded API data" = Table.ExpandListColumn(Source, "API data"),
+				    #"Expanded API data1" = Table.ExpandTableColumn(#"Expanded API data", "API data", {"api_data", "api_cursor"}, {"api_data", "api_cursor"}),
+				    #"Expanded api_data" = Table.ExpandListColumn(#"Expanded API data1", "api_data"),
+				    #"Expanded api_data1" = Table.ExpandRecordColumn(#"Expanded api_data", "api_data", {"account_id", "date_start", "date_stop", "spend", "account_currency", "reach", "impressions", "frequency", "inline_link_clicks", "clicks", "inline_post_engagement"}, {"account_id", "date_start", "date_stop", "spend", "account_currency", "reach", "impressions", "frequency", "inline_link_clicks", "clicks", "inline_post_engagement"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Expanded api_data1",{"api_cursor"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Columns",{{"Customer Ad Account", type text}, {"account_id", Int64.Type}, {"date_start", type date}, {"date_stop", type date}, {"spend", type number}, {"account_currency", type text}, {"reach", Int64.Type}, {"impressions", Int64.Type}, {"frequency", type number}, {"inline_link_clicks", Int64.Type}, {"clicks", Int64.Type}, {"inline_post_engagement", Int64.Type}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Customer Ad Account", "Id Act Conjunto de Anúncio"}, {"account_id", "Id Conta de Anúncio"}, {"date_start", "Data Inicial"}, {"date_stop", "Data Final"}, {"spend", "Valor Gasto"}, {"account_currency", "Moeda"}, {"reach", "Alcance"}, {"impressions", "Impressões"}, {"frequency", "Frequência"}, {"inline_link_clicks", "Cliques no Link"}, {"clicks", "Cliques"}, {"inline_post_engagement", "Engajamento de Posts"}})
+				in
+				    #"Renamed Columns"
+				```
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

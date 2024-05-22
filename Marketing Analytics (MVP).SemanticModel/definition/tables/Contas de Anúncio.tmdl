@@ -30,19 +30,19 @@ table 'Contas de Anúncio'
 		source = ```
 				let
 				// required variables
-				    url = "https://graph.facebook.com/v18.0/me",
-				    fields = "id,adaccounts{business_name,name}",
+				    Base_url = "https://graph.facebook.com/v18.0/",
+				    Endpoint_url = "me",
+				    Fields = "id,adaccounts{business_name,name}",
+				    Date_preset = "maximum",
 				    headers = [ Authorization = "Bearer " & access_token ],
 				
 				    Source = Json.Document(
 				        Web.Contents(
-				            url, 
+				            Base_url, 
 				            [
 				                Headers = headers,
-				                Query = [ 
-				                    date_preset = "maximum",
-				                    fields = fields 
-				                ]
+				                RelativePath = Endpoint_url,
+				                Query = [ date_preset = Date_preset, fields = Fields ]
 				            ]
 				        )
 				    ),
