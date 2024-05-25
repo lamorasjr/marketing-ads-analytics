@@ -1,43 +1,27 @@
 table Campanhas
-	lineageTag: 04bca426-b32e-4e8e-98b7-7a2e6998b5de
+	lineageTag: acedde21-94a6-4caf-afbf-1f5f439bd72f
 
-	measure '_ContagemTotal PK' =
-			
-			COUNT(
-			    Campanhas[Campanha Id]
-			)
-		formatString: 0
-		lineageTag: a6af5732-e398-4499-a908-1721460c916a
+	column 'Id Act Conta de Anúncio'
+		dataType: string
+		lineageTag: bc3bc5ab-3d60-486c-9edb-74597db11fde
+		summarizeBy: none
+		sourceColumn: Id Act Conta de Anúncio
 
-	measure '_ContagemUnicos PK' =
-			
-			DISTINCTCOUNT(
-			    Campanhas[Campanha Id]
-			)
-		formatString: 0
-		lineageTag: ce215ff0-5e6d-4d4e-bfa6-b5d17d70f393
-
-	measure 'Min Data' =
-			
-			MIN(
-			    Campanhas[Data de Criação]
-			)
-		formatString: General Date
-		lineageTag: 11a1948e-ba26-4517-9cde-4c0db6ae8504
+		annotation SummarizationSetBy = Automatic
 
 	column 'Id Conta de Anúncio'
 		dataType: int64
 		formatString: 0
-		lineageTag: 5bd260c0-d852-4d19-94f4-c774d492cc3a
-		summarizeBy: none
+		lineageTag: a897a825-c787-464b-b309-6801603ab0f0
+		summarizeBy: sum
 		sourceColumn: Id Conta de Anúncio
 
-		annotation SummarizationSetBy = User
+		annotation SummarizationSetBy = Automatic
 
 	column 'Campanha Id'
 		dataType: int64
 		formatString: 0
-		lineageTag: fc9fe0f5-b47b-46b4-a212-ef02842cdd0d
+		lineageTag: 639bd575-369b-4b9e-bf26-671a5bb950ad
 		summarizeBy: count
 		sourceColumn: Campanha Id
 
@@ -45,7 +29,7 @@ table Campanhas
 
 	column 'Campanha Nome'
 		dataType: string
-		lineageTag: 3898b355-8980-4a98-a04c-791f02bd0db9
+		lineageTag: cdbd1770-af06-4123-8d69-7412ed083fb6
 		summarizeBy: none
 		sourceColumn: Campanha Nome
 
@@ -53,7 +37,7 @@ table Campanhas
 
 	column 'Objetivo de Campanha'
 		dataType: string
-		lineageTag: d4e1b9de-547d-427f-a6c7-06b4d0bb0023
+		lineageTag: 71cdac8c-0efc-439b-a1f3-fa001348ba7a
 		summarizeBy: none
 		sourceColumn: Objetivo de Campanha
 
@@ -61,7 +45,7 @@ table Campanhas
 
 	column 'Tipo de Compra'
 		dataType: string
-		lineageTag: 0a95f572-0768-4ccd-8950-5de22a57c8a3
+		lineageTag: 9c7dfc93-49bb-4bf3-accc-f114d2995359
 		summarizeBy: none
 		sourceColumn: Tipo de Compra
 
@@ -69,7 +53,7 @@ table Campanhas
 
 	column 'Estratégia de Otmimização'
 		dataType: string
-		lineageTag: 466f652b-714f-4132-b2ae-317310285e44
+		lineageTag: 886931a6-8b1f-4dd3-91de-2eba79af243f
 		summarizeBy: none
 		sourceColumn: Estratégia de Otmimização
 
@@ -77,16 +61,17 @@ table Campanhas
 
 	column 'Orçamento Diário'
 		dataType: double
-		formatString: 0
-		lineageTag: 39a5a7eb-cb7a-4e89-ac35-b7b91091ac10
+		lineageTag: 735f3316-ca04-49d8-8b9d-149e10ec40bb
 		summarizeBy: sum
 		sourceColumn: Orçamento Diário
 
 		annotation SummarizationSetBy = Automatic
 
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	column 'Categoria Especial de Anúncio'
 		dataType: string
-		lineageTag: 67de3108-19a3-4e03-a2e9-dfe38d7bc4c3
+		lineageTag: 27299efa-0cb9-4630-a5c1-845279945140
 		summarizeBy: none
 		sourceColumn: Categoria Especial de Anúncio
 
@@ -94,7 +79,7 @@ table Campanhas
 
 	column Status
 		dataType: string
-		lineageTag: 445f9764-677c-4c5c-93d3-2aa90f7c5f5d
+		lineageTag: 46f433ba-797f-41d2-addb-ce0ec2945765
 		summarizeBy: none
 		sourceColumn: Status
 
@@ -103,7 +88,7 @@ table Campanhas
 	column 'Data de Criação'
 		dataType: dateTime
 		formatString: Long Date
-		lineageTag: cacdaea2-5e68-40cd-b4dc-af7f3ed54859
+		lineageTag: 8de3aae2-cd16-4c52-ae04-4bbdd0e24dc0
 		summarizeBy: none
 		sourceColumn: Data de Criação
 
@@ -114,7 +99,7 @@ table Campanhas
 	column 'Data de Veiculação'
 		dataType: dateTime
 		formatString: Long Date
-		lineageTag: 5117d997-a774-4be9-bce2-c7e3d9066810
+		lineageTag: 9b7ac9e2-4bee-445b-a1aa-7439b47fc3eb
 		summarizeBy: none
 		sourceColumn: Data de Veiculação
 
@@ -125,7 +110,7 @@ table Campanhas
 	column 'Data de Pausa'
 		dataType: dateTime
 		formatString: Long Date
-		lineageTag: 1728e442-603b-4c59-a13a-cddf52cdd08d
+		lineageTag: 787702a9-22ba-4381-bd15-5ee32daffdf8
 		summarizeBy: none
 		sourceColumn: Data de Pausa
 
@@ -136,7 +121,7 @@ table Campanhas
 	column 'Data da Última Atualização'
 		dataType: dateTime
 		formatString: Long Date
-		lineageTag: e9447ea4-8755-4563-b2f1-d70ce42dc67f
+		lineageTag: a87ea264-7c0d-4fc9-a8a5-ce9d7d4c0556
 		summarizeBy: none
 		sourceColumn: Data da Última Atualização
 
@@ -147,17 +132,9 @@ table Campanhas
 	column 'Id Campanha de Origem'
 		dataType: int64
 		formatString: 0
-		lineageTag: a6d23aa6-847f-47d4-ac2d-1bc5dac3019b
+		lineageTag: d75b274e-57c8-46e2-8b15-41b1d0988693
 		summarizeBy: sum
 		sourceColumn: Id Campanha de Origem
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Id Act Conta de Anúncio'
-		dataType: string
-		lineageTag: b57cd28d-6c87-44a1-94bc-143ae6d90bef
-		summarizeBy: none
-		sourceColumn: Id Act Conta de Anúncio
 
 		annotation SummarizationSetBy = Automatic
 
@@ -166,7 +143,7 @@ table Campanhas
 		source = ```
 				let
 				// API parameters
-				    Base_url = "https://graph.facebook.com/v18.0/",
+				    Base_url = "https://graph.facebook.com/v20.0/",
 				    Endpoint_url = "/campaigns",
 				    Fields = "account_id,id,name,objective,buying_type,bid_strategy,daily_budget,special_ad_category,status,created_time,start_time,stop_time,updated_time,source_campaign_id",
 				    Limit = "1000",

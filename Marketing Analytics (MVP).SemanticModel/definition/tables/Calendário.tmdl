@@ -18,7 +18,7 @@ table Calendário
 		dataType: int64
 		formatString: 0
 		lineageTag: a574ee16-2ec8-4392-9d50-9d388eac79b9
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: Ano
 
 		annotation SummarizationSetBy = Automatic
@@ -27,7 +27,7 @@ table Calendário
 		dataType: int64
 		formatString: 0
 		lineageTag: c682daa7-7354-4ec6-8213-21f0b8b5aa03
-		summarizeBy: none
+		summarizeBy: count
 		sourceColumn: Mês Id
 
 		annotation SummarizationSetBy = Automatic
@@ -58,7 +58,7 @@ table Calendário
 		dataType: int64
 		formatString: 0
 		lineageTag: b43ccbc1-fcce-41ef-b93a-6b09550eb1a2
-		summarizeBy: none
+		summarizeBy: count
 		sourceColumn: Trimeste Id
 
 		annotation SummarizationSetBy = Automatic
@@ -78,7 +78,7 @@ table Calendário
 		dataType: int64
 		formatString: 0
 		lineageTag: 9ec9e7f4-bc61-427e-b17b-d36fd429e9c0
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: Semana do Ano
 
 		annotation SummarizationSetBy = Automatic
@@ -98,7 +98,7 @@ table Calendário
 		dataType: int64
 		formatString: 0
 		lineageTag: cbecb585-0aee-4287-91bd-edf53b0ead5a
-		summarizeBy: none
+		summarizeBy: sum
 		sourceColumn: Dia
 
 		annotation SummarizationSetBy = Automatic
@@ -118,7 +118,7 @@ table Calendário
 		dataType: int64
 		formatString: 0
 		lineageTag: d256a3fd-ceab-4089-80ad-3bf421fbac7f
-		summarizeBy: none
+		summarizeBy: count
 		sourceColumn: Dia da Semana Id
 
 		annotation SummarizationSetBy = Automatic
@@ -158,7 +158,7 @@ table Calendário
 		source =
 				let
 				    EndDate = DateTime.Date(DateTime.LocalNow()),
-				    StartDate = Date.StartOfYear(#date(2000,1,1)),
+				    StartDate = Date.StartOfYear(#date(2020,1,1)),
 				    Source = List.Dates(StartDate, Duration.Days(EndDate - StartDate) + 1, #duration(1,0,0,0)),
 				    #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
 				    #"Renamed Columns" = Table.RenameColumns(#"Converted to Table",{{"Column1", "Date"}}),
